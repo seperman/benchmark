@@ -8,9 +8,9 @@ import argparse
 import settings
 
 redis = StrictRedis(
-    host=settings.PACMAN_REDIS_HOST,
-    port=settings.PACMAN_REDIS_PORT,
-    db=settings.PACMAN_REDIS_DB_NUM
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    db=settings.REDIS_DB_NUM
     )
 
 NUMBER_OF_KEYS_TO_MAKE = settings.PYREDIS_NUMBER_OF_KEYS_TO_MAKE
@@ -21,7 +21,7 @@ def prepare_redis():
     """fills redis with stuff"""
     stuff = {}
     for i in range(NUMBER_OF_KEYS_TO_MAKE):
-        stuff['redis_benchmark.%s' % i] = ''.join([random.choice(string.ascii_letters + string.digits + '    ') for n in xrange(random.randint(1,256))])
+        stuff['redis_benchmark.%s' % i] = ''.join([random.choice(string.ascii_letters + string.digits + '    ') for n in range(random.randint(1,256))])
     redis.mset(stuff)
     print ('%s keys made' % NUMBER_OF_KEYS_TO_MAKE)
     return stuff.keys()
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     """)
 
     prepare_redis()
-    print "repeating tests %s times." % REPEAT_TEST_THIS_MANY_TIMES
+    print("repeating tests %s times." % REPEAT_TEST_THIS_MANY_TIMES)
     inidividual_get_time = timeit.timeit("test_inidividual_calls(keys)", setup="from __main__ import NUMBER_OF_KEYS_TO_MAKE,test_inidividual_calls;keys=['redis_benchmark.%s' % i for i in range(NUMBER_OF_KEYS_TO_MAKE)]", number=REPEAT_TEST_THIS_MANY_TIMES)
     print("Get: Getting %s keys from redis individually took %s seconds." % (NUMBER_OF_KEYS_TO_MAKE, inidividual_get_time/REPEAT_TEST_THIS_MANY_TIMES))
     mget_time = timeit.timeit("test_mget_calls(keys)", setup="from __main__ import NUMBER_OF_KEYS_TO_MAKE,test_mget_calls;keys=['redis_benchmark.%s' % i for i in range(NUMBER_OF_KEYS_TO_MAKE)]", number=REPEAT_TEST_THIS_MANY_TIMES)
