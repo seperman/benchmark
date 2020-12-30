@@ -37,3 +37,17 @@ Getting dictionary key and assigning it to a variable:
 assigning a dictionary key value to a variable is 1.42625624731 faster
 
 ```
+
+# Hashes comparison
+
+```
+    ############################################################################
+    #                             HASHES COMPARISON                            #
+    ############################################################################
+
+sha256:
+0.0032799430191516876
+mmh3:
+0.0007216100057121366
+mmh3 is 4.545312555519243 faster than sha256
+```
